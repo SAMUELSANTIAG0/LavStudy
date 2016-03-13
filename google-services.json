@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_id": "lavstudy-8682",
+    "project_number": "909757037986",
+    "name": "LavStudy"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909757037986:android:aff1f7539adc0b67",
+        "client_id": "android:com.uoldev.lavstudy",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.uoldev.lavstudy",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909757037986-7742u74nngi3ajikdmdem4ut3743s5kp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uoldev.lavstudy",
+            "certificate_hash": "C7CCD2FD7951141CDCD1F8A6D897559FF0D83A4F"
+          }
+        },
+        {
+          "client_id": "909757037986-1hbdv7fmsl8eaempunqq0ab1qrpvkvjk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-75009852-1"
+          }
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909757037986-1hbdv7fmsl8eaempunqq0ab1qrpvkvjk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
