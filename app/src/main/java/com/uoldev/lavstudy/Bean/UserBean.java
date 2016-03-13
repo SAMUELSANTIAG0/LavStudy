@@ -25,7 +25,6 @@ public class UserBean implements Parcelable {
     }
 
     public UserBean(){
-
     }
 
     public UserBean(String personName, String personEmail, String personId, Uri personPhoto){
