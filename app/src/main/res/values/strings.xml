@@ -1,10 +1,31 @@
 <resources>
     <string name="app_name">LavStudy</string>
     <string name="title_activity_maps">Map</string>
+    <string name="btn_login">FAZER LOGIN</string>
     <string name="title_activity_main">LavStudy</string>
+
+    <string name="tl_unnamed">Ainda não sabemos quem você é</string>
+    <string name="tl_unnamedtwo">Faça login abaixo e tenha acsso a todas as funções do aplicativo</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="app_version">VERSÃO DO APLICATIVO 1B.0.0.1</string>
+    <string name="title_activity_identificacao">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Insira seu e-mail</string>
+    <string name="prompt_password">agora sua senha</string>
+    <string name="action_sign_in">Entrar ou registrar</string>
+    <string name="action_sign_in_short">Entrar</string>
+    <string name="error_invalid_email">O e-mail não é valido</string>
+    <string name="error_invalid_password">A senha é muito pequena</string>
+    <string name="error_incorrect_password">A senha está incorreta</string>
+    <string name="error_field_required">Campos obrigatórios</string>
+    <string name="permission_rationale">"É necessário confirmar o e-mail para entrar no sistema"
+    </string>
+    <string name="title_activity_logon">Sign in</string>
+
 </resources>
