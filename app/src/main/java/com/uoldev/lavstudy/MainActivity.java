@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void goMaps(View view){
-        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+    public void goOut(View view){
+        Intent intent = new Intent(MainActivity.this,LoginActivity.class);
         startActivity(intent);
     }
 }

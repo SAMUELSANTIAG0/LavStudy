@@ -3,21 +3,20 @@ package com.uoldev.lavstudy;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,6 +27,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.uoldev.lavstudy.Bean.UserBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +63,7 @@ public class LogonActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private UserBean userBean = new UserBean();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,11 +195,14 @@ public class LogonActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
+        //validação sem serviço web
+        userBean.setPersonEmail(mEmailView.getText().toString());
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
+
         return password.length() > 4;
     }
 
@@ -324,6 +330,7 @@ public class LogonActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             // TODO: register the new account here.
+
             return true;
         }
 
@@ -333,7 +340,27 @@ public class LogonActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+
+
+                //validação sem serviço web
+                userBean.setPersonId(mPasswordView.getText().toString());
+                UserBean user = new UserBean("Administrador", "adm@email.com", "12345", Uri.parse("none"));
+                Intent intent = new Intent(LogonActivity.this, MainActivity.class);
+                if (userBean.getPersonEmail().equals(user.getPersonEmail()) ||
+                        userBean.getPersonId().equals(user.getPersonId())){
+                    Toast.makeText(LogonActivity.this, "Logado como " + user.getPersonName(),
+                            Toast.LENGTH_LONG).show();
+                    startActivity(intent);
+                    finish();
+                }else {
+                    Toast.makeText(LogonActivity.this, "Entre com um e-mail cadastrado ",
+                            Toast.LENGTH_LONG).show();
+                    mEmailView.setText("");
+                    mPasswordView.setText("");
+                }
+
+
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
