@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
@@ -45,9 +44,8 @@ public class UserDao extends SQLiteOpenHelper {
                 + "personName TEXT, "
                 + "personEmail TEXT, "
                 + "personId TEXT, "
-                + "personPhoto TEXT,)";
-
-
+                + "personPhoto TEXT)";
+        db.execSQL(sql);
     }
 
     /**
@@ -78,6 +76,7 @@ public class UserDao extends SQLiteOpenHelper {
     }
 
     public void salve(UserBean userBean){
+        reset();
         ContentValues valores = new ContentValues();
 
         valores.put("personName", userBean.getPersonName());
@@ -90,7 +89,7 @@ public class UserDao extends SQLiteOpenHelper {
 
     public UserBean consult(){
         UserBean userBean = new UserBean();
-        String sql = "Select * from user order by nome";
+        String sql = "Select * from user";
         Cursor cursor = getReadableDatabase().rawQuery(sql, null);
 
         try {
@@ -103,12 +102,20 @@ public class UserDao extends SQLiteOpenHelper {
                 userBean.setPersonPhoto(Uri.parse(cursor.getString(4)));
 
             }
-        } catch (SQLException sqle) {
+        } catch (android.database.SQLException sqle) {
         } finally {
             cursor.close();
         }
 
         return userBean;
+    }
+
+    public void reset() {
+        String sql = "DROP TABLE IF EXISTS " + TABELA;
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(sql);
+        onCreate(db);
+        db.close();
     }
 
 }

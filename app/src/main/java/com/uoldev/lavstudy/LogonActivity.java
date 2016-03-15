@@ -202,7 +202,7 @@ public class LogonActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-
+        userBean.setPersonId(mPasswordView.getText().toString());
         return password.length() > 4;
     }
 
