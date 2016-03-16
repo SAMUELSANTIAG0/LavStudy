@@ -32,11 +32,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
-    // Dependency for Google Sign-In
-    
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.squareup.picasso:picasso:2.5.2'
     // UiAutomatorTesting
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -55,17 +54,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 GoogleSignInAccount acct = result.getSignInAccount();
-                Toast.makeText(LoginActivity.this, "Bem vindo " + acct.getDisplayName() + "!",
-                        Toast.LENGTH_LONG).show();
 
                 // TODO: Get account information
                 UserBean userBean= new UserBean(acct.getDisplayName(),acct.getEmail(), acct.getId(), acct.getPhotoUrl());
                 UserDao userDao = new UserDao(LoginActivity.this);
                 userDao.salve(userBean);
                 userDao.close();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         }
     }
@@ -86,8 +81,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+                UserDao userDao = new UserDao(this);
+                if(userDao.consult().getPersonId().isEmpty()) {
+                    userDao.close();
+                    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                }else {
+                    userDao.close();
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }
                 break;
             // ...
         }
