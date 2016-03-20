@@ -10,18 +10,18 @@
     tools:context="com.uoldev.lavstudy.LoginActivity"
     android:background="#71141c">
 
-    <Button
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:text="@string/btn_login"
-        android:id="@+id/btnLogin"
-        android:background="#f9a551"
-        android:textStyle="bold"
-        android:textColor="#ffffff"
-        android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:onClick="goLogon" />
+    <!--<Button-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:text="@string/btn_login"-->
+        <!--android:id="@+id/btnLogin"-->
+        <!--android:background="#f9a551"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="#ffffff"-->
+        <!--android:layout_below="@+id/textView3"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="26dp"-->
+        <!--android:onClick="goLogon" />-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -68,5 +68,16 @@
         android:layout_centerHorizontal="true"
         android:textSize="8dp"
         android:textColor="#ffffff" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="31dp"
+        android:textStyle="bold"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>
 

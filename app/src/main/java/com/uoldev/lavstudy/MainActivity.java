@@ -13,6 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+import com.uoldev.lavstudy.Dao.UserDao;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -41,6 +46,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        ImageView imageViewPhoto = (ImageView)findViewById(R.id.imageViewPhotoUser);
+        TextView textViewNome = (TextView)findViewById(R.id.textViewMainName);
+        UserDao userDao = new UserDao(MainActivity.this);
+        textViewNome.setText(userDao.consult().getPersonName());
+        Picasso.with(this).load(userDao.consult().getPersonPhoto()).into(imageViewPhoto);
+        userDao.close();
+
     }
 
     @Override
