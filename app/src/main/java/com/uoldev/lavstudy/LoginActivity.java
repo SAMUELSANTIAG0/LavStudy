@@ -81,16 +81,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-                UserDao userDao = new UserDao(this);
-                if(userDao.consult().getPersonId().isEmpty()) {
-                    userDao.close();
-                    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                    startActivityForResult(signInIntent, RC_SIGN_IN);
-                }else {
-                    userDao.close();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                }
-                break;
+                    UserDao userDao = new UserDao(LoginActivity.this);
+                    if (userDao.consult().getPersonId().isEmpty()){
+                        userDao.close();
+                        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                        startActivityForResult(signInIntent, RC_SIGN_IN);
+                    }else {
+                        userDao.close();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    }
+                    break;
             // ...
         }
     }

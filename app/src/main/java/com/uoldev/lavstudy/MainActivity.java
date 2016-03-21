@@ -46,14 +46,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        ImageView imageViewPhoto = (ImageView)findViewById(R.id.imageViewPhotoUser);
-        TextView textViewNome = (TextView)findViewById(R.id.textViewMainName);
-        UserDao userDao = new UserDao(MainActivity.this);
-        textViewNome.setText(userDao.consult().getPersonName());
-        Picasso.with(this).load(userDao.consult().getPersonPhoto()).into(imageViewPhoto);
-        userDao.close();
-
     }
 
     @Override
@@ -70,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
 
@@ -88,9 +81,11 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -111,6 +106,39 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Called whenever a key, touch, or trackball event is dispatched to the
+     * activity.  Implement this method if you wish to know that the user has
+     * interacted with the device in some way while your activity is running.
+     * This callback and {@link #onUserLeaveHint} are intended to help
+     * activities manage status bar notifications intelligently; specifically,
+     * for helping activities determine the proper time to cancel a notfication.
+     * <p/>
+     * <p>All calls to your activity's {@link #onUserLeaveHint} callback will
+     * be accompanied by calls to {@link #onUserInteraction}.  This
+     * ensures that your activity will be told of relevant user activity such
+     * as pulling down the notification pane and touching an item there.
+     * <p/>
+     * <p>Note that this callback will be invoked for the touch down action
+     * that begins a touch gesture, but may not be invoked for the touch-moved
+     * and touch-up actions that follow.
+     *
+     * @see #onUserLeaveHint()
+     */
+    @Override
+    public void onUserInteraction() {
+        ImageView imageViewPhoto = (ImageView)findViewById(R.id.imageViewPhotoUser);
+        TextView textViewNome = (TextView)findViewById(R.id.textViewNameUser);
+        TextView textViewEmail = (TextView)findViewById(R.id.textViewEmailUser);
+        UserDao userDao = new UserDao(MainActivity.this);
+        textViewNome.setText(userDao.consult().getPersonName());
+        textViewEmail.setText(userDao.consult().getPersonEmail());
+        Picasso.with(this).load(userDao.consult().getPersonPhoto()).resize(130, 130).into(imageViewPhoto);
+        userDao.close();
+
+        super.onUserInteraction();
     }
 
     public void goOut(View view){
