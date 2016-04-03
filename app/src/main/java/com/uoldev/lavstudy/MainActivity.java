@@ -21,6 +21,7 @@ import com.uoldev.lavstudy.Dao.UserDao;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private boolean first = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        fab.hide();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -99,12 +103,20 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_exit) {
+//            new UserDao(getApplicationContext()).reset();
+            Bundle parametros = new Bundle();
+            parametros.putBoolean("logout", true);
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            intent.putExtras(parametros);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (drawer != null) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
 
@@ -129,20 +141,19 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onUserInteraction() {
-        ImageView imageViewPhoto = (ImageView)findViewById(R.id.imageViewPhotoUser);
-        TextView textViewNome = (TextView)findViewById(R.id.textViewNameUser);
-        TextView textViewEmail = (TextView)findViewById(R.id.textViewEmailUser);
-        UserDao userDao = new UserDao(MainActivity.this);
-        textViewNome.setText(userDao.consult().getPersonName());
-        textViewEmail.setText(userDao.consult().getPersonEmail());
-        Picasso.with(this).load(userDao.consult().getPersonPhoto()).resize(130, 130).into(imageViewPhoto);
-        userDao.close();
-
         super.onUserInteraction();
+
+        if(first) {
+            ImageView imageViewPhoto = (ImageView) findViewById(R.id.imageViewPhotoUser);
+            TextView textViewNome = (TextView) findViewById(R.id.textViewNameUser);
+            TextView textViewEmail = (TextView) findViewById(R.id.textViewEmailUser);
+            UserDao userDao = new UserDao(MainActivity.this);
+            textViewNome.setText(userDao.consult().getPersonName());
+            textViewEmail.setText(userDao.consult().getPersonEmail().toString());
+            Picasso.with(this).load(userDao.consult().getPersonPhoto()).resize(110, 120).into(imageViewPhoto);
+            userDao.close();
+        }
     }
 
-    public void goOut(View view){
-        Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-        startActivity(intent);
-    }
+
 }

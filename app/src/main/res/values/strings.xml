@@ -1,7 +1,7 @@
 <resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">LavStudy</string>
     <string name="title_activity_maps">Map</string>
-    <string name="btn_login">FAZER LOGIN</string>
+    <string name="btn_login">ENTRAR COM O GOOGLE</string>
     <string name="title_activity_main">LavStudy</string>
 
     <string name="tl_unnamed">Ainda não sabemos quem você é</string>
@@ -56,7 +56,7 @@
     <string name="common_google_play_services_sign_in_failed_text" msgid="59739986196915578">"Erro ao fazer login na conta especificada. Escolha outra conta."</string>
     <string name="common_google_play_services_restricted_profile_title" msgid="4958149393843193760">"Perfil restrito"</string>
     <string name="common_google_play_services_restricted_profile_text" msgid="6951442375899151085">"O acesso a contas a partir de um perfil restrito não é compatível."</string>
-    <string name="common_signin_button_text" msgid="3156914698180786012">"Fazer login"</string>
+    <string name="common_signin_button_text" msgid="3156914698180786012">"Entrar com o Google"</string>
     <string name="common_signin_button_text_long" msgid="1483290677806110088">"Fazer login com o Google"</string>
     <string name="common_google_play_services_unknown_issue" msgid="7170719956698345984">"<xliff:g id="APP_NAME">%1$s</xliff:g> está tendo problemas com os serviços do Google Play. Se o problema persistir, entre em contato com o desenvolvedor para receber ajuda."</string>
     <string name="wallet_buy_button_place_holder" msgid="4184147110658930238">"Comprar com o Google"</string>
@@ -107,5 +107,7 @@
     <string name="server_client_id">YOUR_SERVER_CLIENT_ID</string>
 
     <string name="title_text">Google Sign-In\nQuickstart</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_test">test</string>
 
 </resources>

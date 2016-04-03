@@ -87,6 +87,17 @@ public class UserDao extends SQLiteOpenHelper {
         getWritableDatabase().insert(TABELA, null, valores);
     }
 
+    public boolean isEmpy(){
+        String sql = "Select * from user";
+        Cursor cursor = getReadableDatabase().rawQuery(sql, null);
+
+        if(cursor.getCount() == 0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     public UserBean consult(){
         UserBean userBean = new UserBean();
         String sql = "Select * from user";
@@ -97,8 +108,8 @@ public class UserDao extends SQLiteOpenHelper {
 
                 userBean.setId(cursor.getInt(0));
                 userBean.setPersonName(cursor.getString(1));
-                userBean.setPersonId(cursor.getString(2));
-                userBean.setPersonEmail(cursor.getString(3));
+                userBean.setPersonEmail(cursor.getString(2));
+                userBean.setPersonId(cursor.getString(3));
                 userBean.setPersonPhoto(Uri.parse(cursor.getString(4)));
 
             }
