@@ -13,23 +13,5 @@
     tools:showIn="@layout/app_bar_main"
     android:background="@color/colorPrimary">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textViewMainName"
-        android:layout_marginTop="205dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="#ffffff" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageViewPhotoUser"
-        android:layout_alignBottom="@+id/textViewMainName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="89dp" />
 
 </RelativeLayout>
