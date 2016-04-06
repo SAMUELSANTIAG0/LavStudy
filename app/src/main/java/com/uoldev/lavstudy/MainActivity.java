@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_maps) {
+            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_exit) {
-//            new UserDao(getApplicationContext()).reset();
             Bundle parametros = new Bundle();
             parametros.putBoolean("logout", true);
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         if (drawer != null) {
             drawer.closeDrawer(GravityCompat.START);
         }
-        return true;
+           return true;
     }
 
     /**
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity
     public void onUserInteraction() {
         super.onUserInteraction();
 
-        if(first) {
+        if (first) {
             ImageView imageViewPhoto = (ImageView) findViewById(R.id.imageViewPhotoUser);
             TextView textViewNome = (TextView) findViewById(R.id.textViewNameUser);
             TextView textViewEmail = (TextView) findViewById(R.id.textViewEmailUser);
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity
             Picasso.with(this).load(userDao.consult().getPersonPhoto()).resize(110, 120).into(imageViewPhoto);
             userDao.close();
         }
+        first = false;
     }
-
 
 }
