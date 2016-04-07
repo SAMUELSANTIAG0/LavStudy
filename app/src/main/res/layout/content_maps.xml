@@ -24,18 +24,19 @@
         android:layout_marginTop="0dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginBottom="30dp">
+        android:layout_marginBottom="50dp">
     </fragment>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Check-in estacionamento"
+        android:text="Check-in"
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="0dp"
-        android:background="@drawable/side_nav_bar"
-        android:onClick="checkIn" />
+        android:background="@drawable/buttonshape2"
+        android:onClick="checkIn"
+        android:textColor="#ffffff" />
 
 </RelativeLayout>
