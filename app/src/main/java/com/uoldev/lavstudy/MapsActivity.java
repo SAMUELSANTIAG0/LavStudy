@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -29,8 +30,8 @@ public class MapsActivity extends MainActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private static final int ZOOM = 4;
-    private LatLng currentLocation;
+    private static final int ZOOM = 18;
+    public static LatLng currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,8 +128,13 @@ public class MapsActivity extends MainActivity
 
         upLoadCurrentLocation();
 
-        CameraPosition cameraPosition = CameraPosition.builder().target(currentLocation).zoom(ZOOM).bearing(360).build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CameraPosition cameraPosition = CameraPosition.builder().target(currentLocation).zoom(ZOOM).bearing(360).build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
+            }
+        }, 500);
 
     }
 

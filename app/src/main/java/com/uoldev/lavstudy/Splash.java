@@ -1,6 +1,7 @@
 package com.uoldev.lavstudy;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.uoldev.lavstudy.Dao.UserDao;
 
 public class Splash extends AppCompatActivity {
@@ -33,9 +35,16 @@ public class Splash extends AppCompatActivity {
         ImageView imageViewLoad = (ImageView)findViewById(R.id.imageViewLoad);
         Animation animation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
         animation.setDuration(SPLASH_TIME_OUT);
-        animation.setBackgroundColor(getResources().getColor(R.color.white));
-        animation.start();
         imageViewLoad.startAnimation(animation);
+
+        MyLocation.LocationResult locationResult = new MyLocation.LocationResult(){
+            @Override
+            public void gotLocation(Location location){
+                MapsActivity.currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+            }
+        };
+        MyLocation myLocation = new MyLocation();
+        myLocation.getLocation(this, locationResult);
 
 
         new Handler().postDelayed(new Runnable() {

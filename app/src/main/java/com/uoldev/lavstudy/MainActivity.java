@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity
             UserDao userDao = new UserDao(MainActivity.this);
             textViewNome.setText(userDao.consult().getPersonName());
             textViewEmail.setText(userDao.consult().getPersonEmail().toString());
-            Picasso.with(this).load(userDao.consult().getPersonPhoto()).resize(110, 120).into(imageViewPhoto);
+            Picasso.with(this).load(userDao.consult().getPersonPhoto()).resize(100, 110).into(imageViewPhoto);
             userDao.close();
         }
         first = false;
