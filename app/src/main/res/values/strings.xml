@@ -109,5 +109,6 @@
     <string name="title_text">Google Sign-In\nQuickstart</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_test">test</string>
+    <string name="title_activity_maps2">Map2</string>
 
 </resources>
