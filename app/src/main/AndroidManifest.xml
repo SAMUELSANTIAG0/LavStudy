@@ -49,9 +49,6 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_identificacao" />
-        <activity
-            android:name=".LogonActivity"
-            android:label="@string/title_activity_logon" />
         <activity android:name=".SignInActivity" />
         <activity android:name=".Splash">
             <intent-filter>

@@ -30,7 +30,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Check-in"
+        android:text="Marcar estacionamento"
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
@@ -38,5 +38,17 @@
         android:background="@drawable/buttonshape2"
         android:onClick="checkIn"
         android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Desmarcar"
+        android:id="@+id/button2"
+        android:background="@drawable/buttonshape2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/map"
+        android:layout_marginBottom="0dp"
+        android:onClick="mapClear"
+        android:textColor="#ffffff"/>
 
 </RelativeLayout>

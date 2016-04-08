@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Date;
+
 /**
  * Created by Samuel Santiago on 06/04/2016.
  */
@@ -34,7 +36,8 @@ public class ParkingDao extends SQLiteOpenHelper {
         String sql = "CREATE TABLE " + TABELA
                 + "(id INTEGER PRIMARY KEY, "
                 + "latitude NUMERIC, "
-                + "longitude NUMERIC)";
+                + "longitude NUMERIC, "
+                + "date DATETIME DEFAULT CURRENT_TIMESTAMP)";
         db.execSQL(sql);
     }
 
@@ -43,6 +46,7 @@ public class ParkingDao extends SQLiteOpenHelper {
         ContentValues valores = new ContentValues();
         valores.put("latitude", latLng.latitude);
         valores.put("longitude", latLng.longitude);
+        valores.put("date", System.currentTimeMillis());
         getWritableDatabase().insert(TABELA, null, valores);
     }
 
@@ -63,6 +67,27 @@ public class ParkingDao extends SQLiteOpenHelper {
         }
 
         return latLng;
+    }
+
+    public Date consultDate(){
+        LatLng latLng = null;
+        Date date = new Date();
+        String sql = "Select * from parking";
+
+        Cursor cursor = getReadableDatabase().rawQuery(sql, null);
+
+        try {
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(0);
+                latLng = new LatLng(cursor.getDouble(1), cursor.getDouble(2));
+                date.setTime(cursor.getLong(3));
+            }
+        } catch (android.database.SQLException sqle) {
+        } finally {
+            cursor.close();
+        }
+
+        return date;
     }
 
 
