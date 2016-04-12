@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -24,13 +25,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.uoldev.lavstudy.Dao.ParkingDao;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MapsActivity extends MainActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private static final int ZOOM = 4;
-    private LatLng currentLocation;
+    private static final int ZOOM = 18;
+    public static LatLng currentLocation;
+    private LatLng lastParking;
+    private Date lastParkingDate;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +88,6 @@ public class MapsActivity extends MainActivity
         MyLocation myLocation = new MyLocation();
         myLocation.getLocation(this, locationResult);
 
-
     }
 
     public void upLoadCurrentLocation(){
@@ -127,9 +134,27 @@ public class MapsActivity extends MainActivity
 
         upLoadCurrentLocation();
 
-        CameraPosition cameraPosition = CameraPosition.builder().target(currentLocation).zoom(ZOOM).bearing(360).build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
 
+        ParkingDao parkingDao = new ParkingDao(getApplicationContext());
+        if(parkingDao.isEmpy()){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    CameraPosition cameraPosition = CameraPosition.builder().target(currentLocation).zoom(ZOOM).bearing(360).build();
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
+                }
+            }, 500);
+        }else {
+            lastParking = parkingDao.consult();
+            lastParkingDate = parkingDao.consultDate();
+            CameraPosition cameraPosition = CameraPosition.builder().target(lastParking).zoom(ZOOM).bearing(360).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(lastParking);
+            markerOptions.title("Estacionado em " + dateFormat.format(lastParkingDate));
+            mMap.addMarker(markerOptions);
+        }
+        parkingDao.close();
     }
 
     private GoogleMap.OnMapLongClickListener mapClick = new GoogleMap.OnMapLongClickListener() {
@@ -141,8 +166,9 @@ public class MapsActivity extends MainActivity
                 mMap.clear();
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(point);
-//                new ParkingDao(getApplicationContext()).parked(markerOptions.getPosition());
-                markerOptions.title("Estacionado em " + point.toString());
+                new ParkingDao(getApplicationContext()).parked(markerOptions.getPosition());
+                lastParkingDate = new ParkingDao(getApplicationContext()).consultDate();
+                markerOptions.title("Estacionado em " + dateFormat.format(lastParkingDate));
                 mMap.addMarker(markerOptions);
             }
         }
@@ -154,10 +180,16 @@ public class MapsActivity extends MainActivity
         upLoadCurrentLocation();
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(currentLocation);
-//        new ParkingDao(getApplicationContext()).parked(markerOptions.getPosition());
-        markerOptions.title("Estacionado em " + currentLocation.toString());
+        new ParkingDao(getApplicationContext()).parked(currentLocation);
+        lastParkingDate = new ParkingDao(getApplicationContext()).consultDate();
+        markerOptions.title("Estacionado em " + dateFormat.format(lastParkingDate));
         mMap.addMarker(markerOptions);
 
+    }
+
+    public void mapClear(View view){
+        mMap.clear();
+        new ParkingDao(getApplicationContext()).reset();
     }
 
 }
