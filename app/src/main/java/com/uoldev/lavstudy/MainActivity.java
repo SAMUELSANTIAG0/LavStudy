@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
 import com.squareup.picasso.Picasso;
 import com.uoldev.lavstudy.Dao.UserDao;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Firebase.setAndroidContext(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                sendMessegeFireData();
             }
         });
 
@@ -153,6 +156,12 @@ public class MainActivity extends AppCompatActivity
             userDao.close();
         }
         first = false;
+    }
+
+    public void sendMessegeFireData(){
+        Firebase myFirebaseRef = new Firebase("https://lavstudy.firebaseio.com/");
+        myFirebaseRef.child("message").setValue("Do you have data? You'll love Firebase.");
+
     }
 
 }
