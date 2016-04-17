@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 import com.squareup.picasso.Picasso;
+import com.uoldev.lavstudy.Bean.RequestBean;
+import com.uoldev.lavstudy.Dao.ParkingDao;
 import com.uoldev.lavstudy.Dao.UserDao;
 
 public class MainActivity extends AppCompatActivity
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        fab.hide();
+//        fab.hide();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -97,7 +99,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_maps) {
-            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            if(this.getClass() != MapsActivity.class){
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            }
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -158,10 +162,16 @@ public class MainActivity extends AppCompatActivity
         first = false;
     }
 
-    public void sendMessegeFireData(){
-        Firebase myFirebaseRef = new Firebase("https://lavstudy.firebaseio.com/");
-        myFirebaseRef.child("message").setValue("Do you have data? You'll love Firebase.");
 
+    public void sendMessegeFireData(){
+        if(new ParkingDao(getApplicationContext()).isEmpy()){
+           startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+        }else {
+            RequestBean requestBean = new RequestBean(getApplicationContext(), "Lavagem ecologica");
+            Server server = new Server(getApplicationContext());
+            server.sendRequest(requestBean);
+            server.close();
+        }
     }
 
 }

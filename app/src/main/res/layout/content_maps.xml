@@ -24,31 +24,32 @@
         android:layout_marginTop="0dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="50dp"
+        tools:layout="@layout/abc_screen_content_include">
     </fragment>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Marcar estacionamento"
-        android:id="@+id/button"
+        android:text="Marcar"
+        android:id="@+id/buttonCheck"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="0dp"
         android:background="@drawable/buttonshape2"
         android:onClick="checkIn"
-        android:textColor="#ffffff" />
+        android:textColor="@color/white" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Desmarcar"
+        android:text="Traçar rota"
         android:id="@+id/button2"
         android:background="@drawable/buttonshape2"
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/map"
         android:layout_marginBottom="0dp"
-        android:onClick="mapClear"
-        android:textColor="#ffffff"/>
+        android:textColor="@color/white"
+        android:onClick="mapRoute" />
 
 </RelativeLayout>

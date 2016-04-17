@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,9 +26,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.uoldev.lavstudy.Dao.ParkingDao;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MapsActivity extends MainActivity
@@ -39,6 +43,7 @@ public class MapsActivity extends MainActivity
     private LatLng lastParking;
     private Date lastParkingDate;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    private Polyline polyline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +123,6 @@ public class MapsActivity extends MainActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -161,7 +165,6 @@ public class MapsActivity extends MainActivity
 
         @Override
         public void onMapLongClick(LatLng point) {
-            // TODO Auto-generated method stub
             if (mMap != null) {
                 mMap.clear();
                 MarkerOptions markerOptions = new MarkerOptions();
@@ -174,20 +177,54 @@ public class MapsActivity extends MainActivity
         }
     };
 
-    public void checkIn(View view) {
 
-        mMap.clear();
-        upLoadCurrentLocation();
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(currentLocation);
-        new ParkingDao(getApplicationContext()).parked(currentLocation);
-        lastParkingDate = new ParkingDao(getApplicationContext()).consultDate();
-        markerOptions.title("Estacionado em " + dateFormat.format(lastParkingDate));
-        mMap.addMarker(markerOptions);
+    public void mapRoute(View view){
+        if(!new ParkingDao(getApplicationContext()).isEmpy()){
+            upLoadCurrentLocation();
+            PolylineOptions polylineOptions = new PolylineOptions();
+            polylineOptions.add(new ParkingDao(getApplicationContext()).consult());
+            polylineOptions.add(currentLocation);
+            polyline = mMap.addPolyline(polylineOptions);
+            CameraPosition cameraPosition = CameraPosition.builder().target(currentLocation).zoom(ZOOM).bearing(360).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
+        }
 
+//        upLoadCurrentLocation();
     }
 
-    public void mapClear(View view){
+
+    public void upLoadPolyline(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                upLoadCurrentLocation();
+                ArrayList<LatLng> latLngs = new ArrayList<>();
+                latLngs.add(currentLocation);
+                latLngs.add(new ParkingDao(getApplicationContext()).consult());
+                polyline.setPoints(latLngs);
+            }
+        }, 3000 );
+    }
+
+    public void checkIn(View view) {
+        Button check = (Button)findViewById(R.id.buttonCheck);
+        if(new ParkingDao(getApplicationContext()).isEmpy()) {
+            check.setText("Desmarcar");
+            mMap.clear();
+            upLoadCurrentLocation();
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(currentLocation);
+            new ParkingDao(getApplicationContext()).parked(currentLocation);
+            lastParkingDate = new ParkingDao(getApplicationContext()).consultDate();
+            markerOptions.title("Estacionado em " + dateFormat.format(lastParkingDate));
+            mMap.addMarker(markerOptions);
+        }else {
+            check.setText("Marcar");
+            mapClear();
+        }
+    }
+
+    public void mapClear(){
         mMap.clear();
         new ParkingDao(getApplicationContext()).reset();
     }
