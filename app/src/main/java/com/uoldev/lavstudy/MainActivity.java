@@ -16,7 +16,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
 import com.squareup.picasso.Picasso;
+import com.uoldev.lavstudy.Bean.RequestBean;
+import com.uoldev.lavstudy.Dao.ParkingDao;
 import com.uoldev.lavstudy.Dao.UserDao;
 
 public class MainActivity extends AppCompatActivity
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Firebase.setAndroidContext(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -36,10 +40,11 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                sendMessegeFireData();
             }
         });
 
-        fab.hide();
+//        fab.hide();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -94,7 +99,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_maps) {
-            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            if(this.getClass() != MapsActivity.class){
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            }
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -153,6 +160,18 @@ public class MainActivity extends AppCompatActivity
             userDao.close();
         }
         first = false;
+    }
+
+
+    public void sendMessegeFireData(){
+        if(new ParkingDao(getApplicationContext()).isEmpy()){
+           startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+        }else {
+            RequestBean requestBean = new RequestBean(getApplicationContext(), "Lavagem ecologica");
+            Server server = new Server(getApplicationContext());
+            server.sendRequest(requestBean);
+            server.close();
+        }
     }
 
 }

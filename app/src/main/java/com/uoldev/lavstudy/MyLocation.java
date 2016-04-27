@@ -126,5 +126,4 @@ public class MyLocation {
         public abstract void gotLocation(Location location);
     }
 
-
 }

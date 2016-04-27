@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,9 +26,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.uoldev.lavstudy.Dao.ParkingDao;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MapsActivity extends MainActivity
@@ -39,6 +43,9 @@ public class MapsActivity extends MainActivity
     private LatLng lastParking;
     private Date lastParkingDate;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    private Polyline polyline;
+    private Handler mHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,15 +81,15 @@ public class MapsActivity extends MainActivity
         //É solicitado a ativação do GPS se ele não tiver ativo
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if(!enabled){
+        if (!enabled) {
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
         }
 
-        MyLocation.LocationResult locationResult = new MyLocation.LocationResult(){
+        MyLocation.LocationResult locationResult = new MyLocation.LocationResult() {
             @Override
-            public void gotLocation(Location location){
-                currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+            public void gotLocation(Location location) {
+                currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
             }
         };
         MyLocation myLocation = new MyLocation();
@@ -90,12 +97,12 @@ public class MapsActivity extends MainActivity
 
     }
 
-    public void upLoadCurrentLocation(){
+    public void upLoadCurrentLocation() {
 
-        MyLocation.LocationResult locationResult = new MyLocation.LocationResult(){
+        MyLocation.LocationResult locationResult = new MyLocation.LocationResult() {
             @Override
-            public void gotLocation(Location location){
-                currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+            public void gotLocation(Location location) {
+                currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
             }
         };
         MyLocation myLocation = new MyLocation();
@@ -118,7 +125,6 @@ public class MapsActivity extends MainActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -136,7 +142,7 @@ public class MapsActivity extends MainActivity
 
 
         ParkingDao parkingDao = new ParkingDao(getApplicationContext());
-        if(parkingDao.isEmpy()){
+        if (parkingDao.isEmpy()) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -144,7 +150,7 @@ public class MapsActivity extends MainActivity
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
                 }
             }, 500);
-        }else {
+        } else {
             lastParking = parkingDao.consult();
             lastParkingDate = parkingDao.consultDate();
             CameraPosition cameraPosition = CameraPosition.builder().target(lastParking).zoom(ZOOM).bearing(360).build();
@@ -155,13 +161,13 @@ public class MapsActivity extends MainActivity
             mMap.addMarker(markerOptions);
         }
         parkingDao.close();
+        mHandler = new Handler();
     }
 
     private GoogleMap.OnMapLongClickListener mapClick = new GoogleMap.OnMapLongClickListener() {
 
         @Override
         public void onMapLongClick(LatLng point) {
-            // TODO Auto-generated method stub
             if (mMap != null) {
                 mMap.clear();
                 MarkerOptions markerOptions = new MarkerOptions();
@@ -174,22 +180,82 @@ public class MapsActivity extends MainActivity
         }
     };
 
-    public void checkIn(View view) {
 
-        mMap.clear();
-        upLoadCurrentLocation();
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(currentLocation);
-        new ParkingDao(getApplicationContext()).parked(currentLocation);
-        lastParkingDate = new ParkingDao(getApplicationContext()).consultDate();
-        markerOptions.title("Estacionado em " + dateFormat.format(lastParkingDate));
-        mMap.addMarker(markerOptions);
+    public void mapRoute(View view) {
+        boolean tracarRota = true;
+        Button button = (Button)findViewById(R.id.buttonRouta);
+
+        if(tracarRota) {
+            if (!new ParkingDao(getApplicationContext()).isEmpy()) {
+                upLoadCurrentLocation();
+                PolylineOptions polylineOptions = new PolylineOptions();
+                polylineOptions.add(new ParkingDao(getApplicationContext()).consult());
+                polylineOptions.add(currentLocation);
+                polyline = mMap.addPolyline(polylineOptions);
+                CameraPosition cameraPosition = CameraPosition.builder().target(currentLocation).zoom(ZOOM).bearing(360).build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, null);
+                mStatusChecker.run();
+                tracarRota = false;
+                button.setText("Cancelar rota");
+            }
+        }else {
+            mHandler.removeCallbacks(mStatusChecker);
+            tracarRota = true;
+            button.setText("Traçar rota");
+        }
 
     }
 
-    public void mapClear(View view){
+    Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                upLoadPolyline(); //this function can change value of mInterval.
+            } finally {
+                // 100% guarantee that this always happens, even if
+                // your update method throws an exception
+                mHandler.postDelayed(mStatusChecker, 3000);
+            }
+        }
+    };
+
+
+    public void upLoadPolyline() {
+
+        upLoadCurrentLocation();
+        ArrayList<LatLng> latLngs = new ArrayList<>();
+        latLngs.add(currentLocation);
+        latLngs.add(new ParkingDao(getApplicationContext()).consult());
+        polyline.setPoints(latLngs);
+
+    }
+
+    public void checkIn(View view) {
+        Button check = (Button) findViewById(R.id.buttonCheck);
+        if (new ParkingDao(getApplicationContext()).isEmpy()) {
+            check.setText("Desmarcar");
+            mMap.clear();
+            upLoadCurrentLocation();
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(currentLocation);
+            new ParkingDao(getApplicationContext()).parked(currentLocation);
+            lastParkingDate = new ParkingDao(getApplicationContext()).consultDate();
+            markerOptions.title("Estacionado em " + dateFormat.format(lastParkingDate));
+            mMap.addMarker(markerOptions);
+        } else {
+            check.setText("Marcar");
+            mapClear();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mHandler.removeCallbacks(mStatusChecker);
+    }
+
+    public void mapClear() {
         mMap.clear();
         new ParkingDao(getApplicationContext()).reset();
     }
-
 }
