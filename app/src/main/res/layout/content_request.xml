@@ -23,21 +23,14 @@
         android:textColor="#ffffff"
         android:layout_alignParentStart="true" />
 
-    <EditText
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_alignBottom="@+id/textView"
-        android:layout_toEndOf="@+id/textView" />
-
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ok"
+        android:text="ESCOLHER"
         android:id="@+id/buttonFindCar"
-        android:layout_alignTop="@+id/editText"
-        android:layout_toEndOf="@+id/editText" />
+        android:layout_alignTop="@+id/textView"
+        android:layout_alignEnd="@+id/buttonGoMap" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,9 +38,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Veículo não encontrado"
         android:id="@+id/textViewCarFind"
-        android:layout_below="@+id/buttonFindCar"
-        android:layout_alignParentStart="true"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -74,7 +67,7 @@
         android:id="@+id/checkBoxParking"
         android:layout_below="@+id/checkBoxCar"
         android:layout_alignParentStart="true"
-        android:checked="false"
+        android:checked="true"
         android:textColor="#ffffff"
         android:layout_alignEnd="@+id/checkBoxCar" />
 
