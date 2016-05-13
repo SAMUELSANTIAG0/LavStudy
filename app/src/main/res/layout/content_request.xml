@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.uoldev.lavstudy.RequestActivity"
+    tools:showIn="@layout/app_bar_request"
+    android:background="@color/colorPrimary">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Selecione um veículo:"
+        android:id="@+id/textView"
+        android:layout_marginTop="41dp"
+        android:textColor="#ffffff"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_toEndOf="@+id/textView" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ok"
+        android:id="@+id/buttonFindCar"
+        android:layout_alignTop="@+id/editText"
+        android:layout_toEndOf="@+id/editText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Veículo não encontrado"
+        android:id="@+id/textViewCarFind"
+        android:layout_below="@+id/buttonFindCar"
+        android:layout_alignParentStart="true"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add novo veículo"
+        android:id="@+id/buttonAddCar"
+        android:layout_below="@+id/textViewCarFind"
+        android:layout_alignParentStart="true" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Veículo Selecionado"
+        android:id="@+id/checkBoxCar"
+        android:layout_centerVertical="true"
+        android:layout_alignEnd="@+id/buttonAddCar"
+        android:checked="false"
+        android:textColor="#ffffff" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Estacionamento Selecionado"
+        android:id="@+id/checkBoxParking"
+        android:layout_below="@+id/checkBoxCar"
+        android:layout_alignParentStart="true"
+        android:checked="false"
+        android:textColor="#ffffff"
+        android:layout_alignEnd="@+id/checkBoxCar" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Serviço Selecionado"
+        android:id="@+id/checkBoxService"
+        android:layout_below="@+id/checkBoxParking"
+        android:layout_alignEnd="@+id/checkBoxCar"
+        android:checked="true"
+        android:textColor="#ffffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Selecione local estacionado"
+        android:id="@+id/textViewParkingDate"
+        android:layout_below="@+id/buttonAddCar"
+        android:layout_marginTop="31dp"
+        android:textColor="#ffffff"
+        android:layout_toStartOf="@+id/buttonFindCar" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ir para mapa"
+        android:id="@+id/buttonGoMap"
+        android:layout_alignTop="@+id/textViewParkingDate"
+        android:layout_toEndOf="@+id/textViewCarFind"
+        android:onClick="goMap" />
+
+</RelativeLayout>

@@ -37,14 +37,13 @@ public class CarDao extends SQLiteOpenHelper {
                 + "(id INTEGER PRIMARY KEY, "
                 + "modeloVc TEXT, "
                 + "placaVc TEXT, "
-                + "id TEXT, "
                 + "corVc TEXT) ";
         db.execSQL(sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "TABELA DELETADA, JA EXISTE " + TABELA;
+        String sql = "DROP TABLE IF EXISTS " + TABELA;
         db.execSQL(sql);
         onCreate(db);
     }
@@ -53,10 +52,10 @@ public class CarDao extends SQLiteOpenHelper {
         reset();
         ContentValues valores = new ContentValues();
 
+        valores.put("id", CarBean.getId());
         valores.put("modeloVc", CarBean.getModeloVc());
         valores.put("placaVc", CarBean.getPlacaVc());
         valores.put("corVc", CarBean.getCorVc());
-        valores.put("id", CarBean.getId());
 
         getWritableDatabase().insert(TABELA, null, valores);
     }
@@ -95,7 +94,7 @@ public class CarDao extends SQLiteOpenHelper {
     }
 
     public void reset() {
-        String sql = "TABELA DELETADA, JA EXISTE " + TABELA;
+        String sql = "DROP TABLE IF EXISTS " + TABELA;
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(sql);
         onCreate(db);

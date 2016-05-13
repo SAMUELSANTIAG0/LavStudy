@@ -102,8 +102,8 @@ public class MainActivity extends AppCompatActivity
             if(this.getClass() != MapsActivity.class){
                 startActivity(new Intent(getApplicationContext(), MapsActivity.class));
             }
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.nav_request) {
+            startActivity(new Intent(getApplicationContext(), RequestActivity.class));
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -126,25 +126,8 @@ public class MainActivity extends AppCompatActivity
            return true;
     }
 
-    /**
-     * Called whenever a key, touch, or trackball event is dispatched to the
-     * activity.  Implement this method if you wish to know that the user has
-     * interacted with the device in some way while your activity is running.
-     * This callback and {@link #onUserLeaveHint} are intended to help
-     * activities manage status bar notifications intelligently; specifically,
-     * for helping activities determine the proper time to cancel a notfication.
-     * <p/>
-     * <p>All calls to your activity's {@link #onUserLeaveHint} callback will
-     * be accompanied by calls to {@link #onUserInteraction}.  This
-     * ensures that your activity will be told of relevant user activity such
-     * as pulling down the notification pane and touching an item there.
-     * <p/>
-     * <p>Note that this callback will be invoked for the touch down action
-     * that begins a touch gesture, but may not be invoked for the touch-moved
-     * and touch-up actions that follow.
-     *
-     * @see #onUserLeaveHint()
-     */
+
+
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
