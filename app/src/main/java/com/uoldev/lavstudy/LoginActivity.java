@@ -9,11 +9,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.AuthData;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.auth.api.Auth;
@@ -21,15 +19,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.uoldev.lavstudy.Bean.UserBean;
-import com.uoldev.lavstudy.Dao.ParkingDao;
 import com.uoldev.lavstudy.Dao.UserDao;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener{
@@ -45,7 +41,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ActionBar bar = getSupportActionBar();
-        Firebase.setAndroidContext(this);
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         // Configure sign-in to request the user's ID, email address, and basic profile. ID and
@@ -77,51 +72,45 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         // Result returned from launching the Intent from
         //   GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                GoogleSignInAccount acct = result.getSignInAccount();
+            handleSignInResult(result);
 
-                // TODO: Get account information
-                final UserBean userBean= new UserBean(acct.getDisplayName(),acct.getEmail(), acct.getId(), acct.getPhotoUrl());
-                Toast.makeText(getApplicationContext(),acct.getServerAuthCode()+" "+ acct.getIdToken()+" "+acct.toString(), Toast.LENGTH_LONG);
-                UserDao userDao = new UserDao(LoginActivity.this);
-                userDao.salve(userBean);
+        }
+    }
 
-                //login in FireBase
-                final Firebase ref = new Firebase("https://lavstudy.firebaseio.com/");
-                final Firebase.AuthResultHandler authResultHandler =new Firebase.AuthResultHandler() {
-                    @Override
-                    public void onAuthenticated(AuthData authData) {
-                        System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
-                        Map<String, String> map = new HashMap<String, String>();
-                        map.put("displayName", userBean.getPersonName());
-                        map.put("email", userBean.getPersonEmail());
-                        ref.child("users").child(userBean.getPersonId()).setValue(map);
-                    }
-                    @Override
-                    public void onAuthenticationError(FirebaseError firebaseError) {
-                        ref.createUser(userBean.getPersonEmail(), userBean.getPersonId(), new Firebase.ValueResultHandler<Map<String, Object>>() {
-                            @Override
-                            public void onSuccess(Map<String, Object> result) {
-                                }
-                            @Override
-                            public void onError(FirebaseError firebaseError) {
-                                // there was an error
-                            }
-                        });
-                    }
-                };
-                ref.authWithPassword(userBean.getPersonEmail(), userBean.getPersonId(), authResultHandler);
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
 
-                userDao.close();
-                hideProgressDialog();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            UserBean userBean= new UserBean(acct.getDisplayName(),acct.getEmail(), acct.getId(), acct.getPhotoUrl());
+            Toast.makeText(getApplicationContext(),acct.getServerAuthCode()+" "+ acct.getIdToken()+" "+acct.toString(), Toast.LENGTH_LONG);
+            UserDao userDao = new UserDao(LoginActivity.this);
+            userDao.salve(userBean);
+            userDao.close();
+            hideProgressDialog();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
-            }
+            updateUI(true);
+        } else {
+            // Signed out, show unauthenticated UI.
+            updateUI(false);
+        }
+    }
+
+    private void updateUI(boolean signedIn) {
+        if (signedIn) {
+            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+        } else {
+
+
+            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
 
@@ -155,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        new ParkingDao(getApplicationContext()).reset();
+//                        new UserDao(getApplicationContext()).reset();
                     }
                 });
     }
@@ -168,15 +157,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
         mProgressDialog.show();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-            }
-        }, 5000);
     }
+
 
     private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
@@ -199,7 +181,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }else {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
-                    break;
+                break;
             // ...
         }
     }
@@ -243,4 +225,5 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         AppIndex.AppIndexApi.end(mGoogleApiClient, viewAction);
         mGoogleApiClient.disconnect();
     }
+
 }

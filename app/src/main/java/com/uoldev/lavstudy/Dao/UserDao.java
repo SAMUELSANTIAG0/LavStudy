@@ -129,4 +129,9 @@ public class UserDao extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void pop(){
+        reset();
+        salve(new UserBean("Samuel Santiago","sss.samuel@gmail.com","105715529606084433089", null ));
+    }
+
 }

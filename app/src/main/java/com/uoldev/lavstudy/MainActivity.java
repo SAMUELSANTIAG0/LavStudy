@@ -131,17 +131,17 @@ public class MainActivity extends AppCompatActivity
     public void onUserInteraction() {
         super.onUserInteraction();
 
-        if (first) {
-            ImageView imageViewPhoto = (ImageView) findViewById(R.id.imageViewPhotoUser);
-            TextView textViewNome = (TextView) findViewById(R.id.textViewNameUser);
-            TextView textViewEmail = (TextView) findViewById(R.id.textViewEmailUser);
-            UserDao userDao = new UserDao(MainActivity.this);
-            textViewNome.setText(userDao.consult().getPersonName());
-            textViewEmail.setText(userDao.consult().getPersonEmail().toString());
-            Picasso.with(this).load(userDao.consult().getPersonPhoto()).resize(100, 110).into(imageViewPhoto);
-            userDao.close();
-        }
-        first = false;
+//        if (first) {
+//            ImageView imageViewPhoto = (ImageView) findViewById(R.id.imageViewPhotoUser);
+//            TextView textViewNome = (TextView) findViewById(R.id.textViewNameUser);
+//            TextView textViewEmail = (TextView) findViewById(R.id.textViewEmailUser);
+//            UserDao userDao = new UserDao(MainActivity.this);
+//            textViewNome.setText(userDao.consult().getPersonName());
+//            textViewEmail.setText(userDao.consult().getPersonEmail().toString());
+//            Picasso.with(this).load(userDao.consult().getPersonPhoto()).resize(100, 110).into(imageViewPhoto);
+//            userDao.close();
+//        }
+//        first = false;
     }
 
 
@@ -155,5 +155,6 @@ public class MainActivity extends AppCompatActivity
             server.close();
         }
     }
+
 
 }

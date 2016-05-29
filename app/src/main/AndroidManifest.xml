@@ -78,7 +78,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.uoldev.lavstudy.MainActivity" />
         </activity>
-        <activity android:name=".CarListActivity"></activity>
+        <activity android:name=".CarListActivity" />
+        <activity
+            android:name=".GMapsActivity"
+            android:label="@string/title_activity_gmaps"></activity>
     </application>
 
 </manifest>

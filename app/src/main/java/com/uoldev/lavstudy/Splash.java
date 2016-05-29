@@ -31,6 +31,8 @@ public class Splash extends AppCompatActivity {
 
 
         if(new UserDao(getApplicationContext()).isEmpy()) {
+            //TODO: loginActivity
+//            intent = new Intent(getApplicationContext(), LoginActivity.class);
             intent = new Intent(getApplicationContext(), LoginActivity.class);
         }else {
             intent = new Intent(getApplicationContext(), MainActivity.class);

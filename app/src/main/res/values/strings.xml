@@ -111,5 +111,6 @@
     <string name="title_activity_test">test</string>
     <string name="title_activity_maps2">Map2</string>
     <string name="title_activity_request">RequestActivity</string>
+    <string name="title_activity_gmaps">Map</string>
 
 </resources>
